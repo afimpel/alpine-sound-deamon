@@ -1,0 +1,26 @@
+#!/bin/bash
+UUID=$(id -u)
+UUID=$(( UUID + 0 ))
+I_OK="✔"
+I_KO="✖️"
+URLgithub="https://raw.githubusercontent.com/afimpel/alpine-sound-deamon/main"
+NC='\e[0m'
+
+if [ $UUID != 0 ]; then
+        echo "${I_KO}    Start the Script as 'root' for it to work properly    ${I_KO}";
+        exit 1;
+else
+    users=$(getent passwd 1000 | cut -d: -f1)
+    echo "${I_OK}    USER:   ${users} ( 1000 )"
+    mkdir -p /home/${users}/.config/systemSound/shutdown
+    mkdir -p /home/${users}/.config/systemSound/startup
+    wget --no-cache -O /usr/bin/systemSound ${URLgithub}/systemSound 
+    wget --no-cache -O /etc/init.d/systemSoundDeamon ${URLgithub}/systemSoundDeamon 
+    chmod 777 -Rv /usr/bin/systemSound
+    chmod 777 -Rv /etc/init.d/systemSoundDeamon
+    sed -i "s/username/$users/g" /etc/init.d/systemSoundDeamon
+    apk add mpg123
+    echo "${I_OK}    END: $(date)"
+fi
+
+

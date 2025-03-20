@@ -1,0 +1,24 @@
+#!/sbin/openrc-run
+
+name=systemSound
+command="/usr/bin/systemSound"
+command_args="--my-daemon-args"
+command_user="username"
+pidfile="/run/systemSound.pid"
+start_stop_daemon_args="--args-for-start-stop-daemon"
+command_background="yes"
+
+depend() {
+	need alsa
+}
+
+start() {
+    ebegin "Starting custom deamon (systemSound)"
+    start-stop-daemon --start --user username --name systemSound --pidfile /run/systemSound.pid --exec /usr/bin/systemSound startup -- --daemon
+    eend $?
+}
+stop() {
+    ebegin "Stoping custom deamon (systemSound)"
+    /usr/bin/systemSound shutdown
+    eend $?
+}
