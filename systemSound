@@ -1,6 +1,6 @@
 #!/bin/bash
 filePlay=$(find /home/*/.config/systemSound/$1 -type f -name "*.mp3" | sort -n | tail -1 | cut -d' ' -f2-)
 if [ ! -z "$filePlay" ]; then
-    echo -e "$(date) :: $(uptime) :: $0 $1 :: $filePlay" >> /var/log/systemSound.log
-    nohup mpg123 $filePlay >> /var/log/systemSound.log
+    echo -e "$(date) :: $(uptime) :: $0 $1 :: $filePlay :: $(whoami) " >> /var/log/systemSound.log
+    mpg123 -q $filePlay >> /var/log/systemSound.log
 fi
